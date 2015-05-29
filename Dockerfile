@@ -68,7 +68,7 @@ RUN sudo su - rdash -c "${WORKON_HOME}/rdash/bin/pip install -r ${PROJECT_HOME}/
 RUN sudo su - rdash -c 'echo {\"registry\":\"http://bower.herokuapp.com\"} > /home/rdash/.bowerrc'
 RUN sudo su - rdash -c "python ${PROJECT_HOME}/manage.py bower_install"
 RUN sudo su - rdash -c "python ${PROJECT_HOME}/manage.py collectstatic --noinput"
-#RUN sudo su - rdash -c "python ${PROJECT_HOME}/manage.py compilemessages"
+RUN sudo su - rdash -c "python ${PROJECT_HOME}/manage.py compilemessages"
 RUN sudo su - rdash -c "python ${PROJECT_HOME}/manage.py makemigrations"
 RUN sudo su - rdash -c "python ${PROJECT_HOME}/manage.py migrate"
 
