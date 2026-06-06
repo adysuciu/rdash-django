@@ -1,0 +1,144 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="{% static 'dashboard/styles.css' %}">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Primary navigation">
+      <a class="brand" href="{% url 'dashboard' %}">
+        <span class="brand-mark">R</span>
+        <span>rdash</span>
+      </a>
+
+      <nav class="nav-list">
+        <a class="active" href="{% url 'dashboard' %}">Dashboard</a>
+        <a href="#">Servers</a>
+        <a href="#">Settings</a>
+        <a href="https://github.com/adysuciu/rdash-django">Source</a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <span>Django 6 demo</span>
+        <span>Agent-ready</span>
+      </div>
+    </aside>
+
+    <main class="content">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Home / Dashboard</p>
+          <h1>Dashboard</h1>
+        </div>
+        <div class="user-pill">
+          <span class="avatar" aria-hidden="true">JB</span>
+          <span>Joe Bloggs</span>
+        </div>
+      </header>
+
+      <section class="notice-row" aria-label="Project notices">
+        <p class="notice success">Thanks for visiting this rebuilt rdash Django demo.</p>
+        <p class="notice danger">The old Bower and Less pipeline has been retired.</p>
+      </section>
+
+      <section class="stats-grid" aria-label="Dashboard statistics">
+        {% for stat in stats %}
+          <article class="stat-card">
+            <span class="stat-icon {{ stat.tone }}" aria-hidden="true">{{ stat.icon|first|upper }}</span>
+            <div>
+              <strong>{{ stat.value }}</strong>
+              <span>{{ stat.label }}</span>
+            </div>
+          </article>
+        {% endfor %}
+      </section>
+
+      <section class="dashboard-grid">
+        <article class="panel">
+          <div class="panel-title">
+            <h2>Servers</h2>
+            <a href="#">Manage</a>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Address</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for server in servers %}
+                  <tr>
+                    <td>{{ server.name }}</td>
+                    <td>{{ server.address }}</td>
+                    <td><span class="status {{ server.status }}">{{ server.status }}</span></td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </article>
+
+        <article class="panel">
+          <div class="panel-title">
+            <h2>Users</h2>
+            <label class="search-label">
+              <span class="sr-only">Search users</span>
+              <input type="search" placeholder="Search">
+            </label>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Username</th>
+                  <th>Role</th>
+                  <th>Account</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for user in users %}
+                  <tr>
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.role }}</td>
+                    <td>{{ user.account }}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </article>
+
+        <article class="panel">
+          <div class="panel-title">
+            <h2>Activity</h2>
+          </div>
+          <ul class="activity-list">
+            {% for item in activity_items %}
+              <li>{{ item }}</li>
+            {% endfor %}
+          </ul>
+        </article>
+
+        <article class="panel loading-panel">
+          <div class="panel-title">
+            <h2>Runtime</h2>
+          </div>
+          <div class="runtime-card">
+            <span class="loader" aria-hidden="true"></span>
+            <p>Gunicorn, WhiteNoise, SQLite, and Django staticfiles are ready for containerized demos.</p>
+          </div>
+        </article>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

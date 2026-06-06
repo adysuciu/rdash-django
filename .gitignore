@@ -57,7 +57,18 @@ components/
 
 # Static files
 public_html/
+staticfiles/
+
+# Local database
+db.sqlite3
+
+# Tool caches
+.pytest_cache/
+.ruff_cache/
+.uv-cache/
+.venv/
 
 # Environment files
 .env*
+!.env.example
 

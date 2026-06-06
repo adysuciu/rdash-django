@@ -1,0 +1,22 @@
+services:
+  web:
+    build:
+      context: .
+    env_file:
+      - .env.example
+    environment:
+      DEBUG: "true"
+      ALLOWED_HOSTS: "*"
+      DATABASE_URL: "sqlite:////app/data/db.sqlite3"
+    ports:
+      - "8000:8000"
+    volumes:
+      - sqlite-data:/app/data
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/healthz/', timeout=2).read()"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+volumes:
+  sqlite-data:
