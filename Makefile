@@ -1,4 +1,4 @@
-.PHONY: setup test lint check collectstatic run docker-build docker-up
+.PHONY: setup test lint check collectstatic run sync-sensors docker-build docker-up
 
 setup:
 	uv sync --dev
@@ -17,6 +17,9 @@ collectstatic:
 
 run:
 	uv run python manage.py runserver 0.0.0.0:8000
+
+sync-sensors:
+	uv run python manage.py sync_thingspeak_readings
 
 docker-build:
 	docker build .

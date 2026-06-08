@@ -10,6 +10,7 @@ A modern Django 6 rebuild of a legacy rdash dashboard demo. The app keeps the sp
 - Gunicorn for container runtime
 - SQLite for local and demo containers
 - `uv` for local dependency management
+- Plotly.js for sensor charts
 
 ## Local Development
 
@@ -28,6 +29,27 @@ docker compose up --build
 ```
 
 The app listens on http://127.0.0.1:8000/ and exposes a health check at http://127.0.0.1:8000/healthz/.
+
+## Sensors
+
+The Sensors page reads temperature and humidity from ThingSpeak through Django, stores normalized readings in SQLite, and renders two Plotly.js charts.
+
+Configure these variables in `.env` or Compose:
+
+- `THINGSPEAK_CHANNEL_ID`
+- `THINGSPEAK_READ_API_KEY`
+- `THINGSPEAK_RESULTS`, default `100`
+- `SENSOR_REFRESH_SECONDS`, default `60`
+
+Temperature is read from ThingSpeak `field1`; humidity is read from `field2`.
+
+```bash
+uv run python manage.py migrate
+uv run python manage.py sync_thingspeak_readings
+uv run python manage.py runserver
+```
+
+Open http://127.0.0.1:8000/sensors/.
 
 ## Verification
 
@@ -48,6 +70,10 @@ Copy `.env.example` to `.env` for local overrides. Supported variables:
 - `ALLOWED_HOSTS`
 - `DATABASE_URL`
 - `DJANGO_SETTINGS_MODULE`
+- `THINGSPEAK_CHANNEL_ID`
+- `THINGSPEAK_READ_API_KEY`
+- `THINGSPEAK_RESULTS`
+- `SENSOR_REFRESH_SECONDS`
 
 ## Agent Notes
 

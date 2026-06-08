@@ -1,0 +1,71 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sensors</title>
+  <link rel="stylesheet" href="{% static 'dashboard/styles.css' %}">
+  <link rel="stylesheet" href="{% static 'sensors/styles.css' %}">
+  <script src="https://cdn.plot.ly/plotly-3.1.1.min.js" defer></script>
+  <script src="{% static 'sensors/sensors.js' %}" defer></script>
+</head>
+<body>
+  <div class="app-shell" data-refresh-seconds="{{ refresh_seconds }}">
+    <aside class="sidebar" aria-label="Primary navigation">
+      <a class="brand" href="{% url 'dashboard' %}">
+        <span class="brand-mark">R</span>
+        <span>rdash</span>
+      </a>
+
+      <nav class="nav-list">
+        <a href="{% url 'dashboard' %}">Dashboard</a>
+        <a class="active" href="{% url 'sensors' %}">Sensors</a>
+        <a href="#">Servers</a>
+        <a href="#">Settings</a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <span>ThingSpeak feed</span>
+        <span>Django stored data</span>
+      </div>
+    </aside>
+
+    <main class="content">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Home / Sensors</p>
+          <h1>Sensors</h1>
+        </div>
+        <div class="user-pill">
+          <span class="avatar" aria-hidden="true">IoT</span>
+          <span>Live feed</span>
+        </div>
+      </header>
+
+      <section class="notice-row" aria-label="Sensor notices">
+        <p class="notice success">Temperature and humidity are read from Django's database.</p>
+        <p class="notice danger" id="sensor-error" hidden></p>
+      </section>
+
+      <section class="sensor-grid" aria-label="Sensor charts">
+        <article class="panel chart-panel">
+          <div class="panel-title">
+            <h2>Temperature</h2>
+            <span class="chart-unit">Celsius</span>
+          </div>
+          <div id="temperature-chart" class="sensor-chart" role="img" aria-label="Temperature chart"></div>
+        </article>
+
+        <article class="panel chart-panel">
+          <div class="panel-title">
+            <h2>Humidity</h2>
+            <span class="chart-unit">Percent</span>
+          </div>
+          <div id="humidity-chart" class="sensor-chart" role="img" aria-label="Humidity chart"></div>
+        </article>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

@@ -8,6 +8,11 @@ env = environ.Env(
     DEBUG=(bool, False),
     SECRET_KEY=(str, "dev-only-change-me"),
     ALLOWED_HOSTS=(list, ["localhost", "127.0.0.1", "0.0.0.0"]),
+    DATABASE_URL=(str, f"sqlite:///{BASE_DIR / 'db.sqlite3'}"),
+    THINGSPEAK_CHANNEL_ID=(str, ""),
+    THINGSPEAK_READ_API_KEY=(str, ""),
+    THINGSPEAK_RESULTS=(int, 100),
+    SENSOR_REFRESH_SECONDS=(int, 60),
 )
 environ.Env.read_env(BASE_DIR / ".env")
 
@@ -23,6 +28,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "dashboard",
+    "sensors",
 ]
 
 MIDDLEWARE = [
@@ -81,6 +87,11 @@ STORAGES = {
 }
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+THINGSPEAK_CHANNEL_ID = env("THINGSPEAK_CHANNEL_ID", default="")
+THINGSPEAK_READ_API_KEY = env("THINGSPEAK_READ_API_KEY", default="")
+THINGSPEAK_RESULTS = env.int("THINGSPEAK_RESULTS")
+SENSOR_REFRESH_SECONDS = env.int("SENSOR_REFRESH_SECONDS")
 
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 SESSION_COOKIE_HTTPONLY = True
