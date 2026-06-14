@@ -28,11 +28,12 @@ DJANGO_SETTINGS_MODULE = "config.settings"
 python_files = ["tests.py", "test_*.py", "*_tests.py"]
 
 [tool.setuptools.packages.find]
-include = ["config*", "dashboard*", "sensors*"]
+include = ["config*", "dashboard*", "sensors*", "jams*"]
 
 [tool.setuptools.package-data]
 dashboard = ["templates/**/*.html", "static/**/*"]
 sensors = ["templates/**/*.html", "static/**/*"]
+jams = ["templates/**/*.html", "static/**/*"]
 
 [tool.ruff]
 line-length = 88

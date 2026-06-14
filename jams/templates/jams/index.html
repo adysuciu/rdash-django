@@ -1,0 +1,171 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Jam Storage</title>
+  <link rel="stylesheet" href="{% static 'dashboard/styles.css' %}">
+  <link rel="stylesheet" href="{% static 'jams/styles.css' %}">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Primary navigation">
+      <a class="brand" href="{% url 'dashboard' %}">
+        <span class="brand-mark">R</span>
+        <span>rdash</span>
+      </a>
+
+      <nav class="nav-list">
+        <a href="{% url 'dashboard' %}">Dashboard</a>
+        <a href="{% url 'sensors' %}">Sensors</a>
+        <a class="active" href="{% url 'jam-storage' %}">Jam Storage</a>
+        <a href="#">Servers</a>
+        <a href="#">Settings</a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <span>Google Sheets feed</span>
+        <span>Django stored data</span>
+      </div>
+    </aside>
+
+    <main class="content">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Home / Jam Storage</p>
+          <h1>Jam Storage</h1>
+        </div>
+        <div class="user-pill">
+          <span class="avatar" aria-hidden="true">JS</span>
+          <span>{{ total_visible }} jars</span>
+        </div>
+      </header>
+
+      <section class="notice-row" aria-label="Jam storage notices">
+        <p class="notice success">
+          Showing {{ total_visible }} jar{{ total_visible|pluralize }}.
+          {% if sync_state.last_successful_sync_at %}
+            Last synced {{ sync_state.last_successful_sync_at|date:"Y-m-d H:i" }}.
+          {% else %}
+            No successful sync yet.
+          {% endif %}
+        </p>
+        {% if sync_error %}
+          <p class="notice danger">{{ sync_error }}</p>
+        {% endif %}
+      </section>
+
+      <section class="panel jam-panel" aria-label="Jam filters and table">
+        <div class="panel-title">
+          <h2>Inventory</h2>
+          <a href="{% url 'jam-storage' %}">Clear filters</a>
+        </div>
+
+        <form class="jam-filters" method="get">
+          <label>
+            <span>Type</span>
+            <select name="type">
+              <option value="">All</option>
+              {% for type in options.types %}
+                <option value="{{ type }}" {% if filters.type == type %}selected{% endif %}>{{ type }}</option>
+              {% endfor %}
+            </select>
+          </label>
+
+          <label>
+            <span>Fruit</span>
+            <select name="fruit">
+              <option value="">All</option>
+              {% for fruit in options.fruits %}
+                <option value="{{ fruit }}" {% if filters.fruit == fruit %}selected{% endif %}>{{ fruit }}</option>
+              {% endfor %}
+            </select>
+          </label>
+
+          <label>
+            <span>Year</span>
+            <select name="year">
+              <option value="">All</option>
+              {% for year in options.years %}
+                <option value="{{ year }}" {% if filters.year == year|stringformat:"s" %}selected{% endif %}>{{ year }}</option>
+              {% endfor %}
+            </select>
+          </label>
+
+          <label>
+            <span>Origin</span>
+            <select name="origin">
+              <option value="">All</option>
+              {% for origin in options.origins %}
+                <option value="{{ origin }}" {% if filters.origin == origin %}selected{% endif %}>{{ origin }}</option>
+              {% endfor %}
+            </select>
+          </label>
+
+          <label>
+            <span>Big</span>
+            <select name="big">
+              <option value="">All</option>
+              <option value="true" {% if filters.big == "true" %}selected{% endif %}>Yes</option>
+              <option value="false" {% if filters.big == "false" %}selected{% endif %}>No</option>
+            </select>
+          </label>
+
+          <label>
+            <span>Status</span>
+            <select name="status">
+              <option value="">All</option>
+              {% for status in options.statuses %}
+                <option value="{{ status }}" {% if filters.status == status %}selected{% endif %}>{{ status }}</option>
+              {% endfor %}
+            </select>
+          </label>
+
+          <label>
+            <span>Date</span>
+            <input type="date" name="date" value="{{ filters.date }}">
+          </label>
+
+          <button type="submit">Filter</button>
+        </form>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Type</th>
+                <th>Fruit</th>
+                <th>Year</th>
+                <th>Origin</th>
+                <th>Big</th>
+                <th>Status</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for jar in jars %}
+                <tr>
+                  <td>{{ jar.sheet_id }}</td>
+                  <td>{{ jar.jam_type|default:"-" }}</td>
+                  <td>{{ jar.fruit|default:"-" }}</td>
+                  <td>{{ jar.year|default:"-" }}</td>
+                  <td>{{ jar.origin|default:"-" }}</td>
+                  <td>{% if jar.big %}Yes{% else %}No{% endif %}</td>
+                  <td>{{ jar.status|default:"-" }}</td>
+                  <td>{% if jar.date %}{{ jar.date|date:"Y-m-d" }}{% else %}-{% endif %}</td>
+                </tr>
+              {% empty %}
+                <tr>
+                  <td colspan="8" class="empty-cell">No jars match these filters.</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
